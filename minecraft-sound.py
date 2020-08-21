@@ -2,6 +2,7 @@
 #Raspberry Pi, Minecraft Sound - Add some sound effects to minecraft
 # unchanged music by http://www.nosoapradio.us/, see LICENCE https://gamesounds.xyz/No%20soap%20radio/LICENSE
 
+from time import time
 from mcpi import minecraft
 from mcpi import block
 import time
@@ -16,8 +17,6 @@ FLYING  = 4
 SWIMING = 5
 
 if __name__ == "__main__":
-
-
 
     #Connect to minecraft by creating the minecraft object
     # - minecraft needs to be running and in a game
@@ -50,34 +49,45 @@ if __name__ == "__main__":
 
     # setup variables
     lastPlayersState = STOPPED
+    lastBlock_beneath = 0
     playersState = STOPPED
     playerJumped = False
+    playerLastJumpTime = 0
     playerFalling = False
     playerFallDistance = 0
 
     #get players position
     lastPlayerPos = mc.player.getPos()
-    
-    
+
     # loop until CTRL+C
     try:
         while(True):
-            
+
             # get players position
             currentPlayerPos = mc.player.getPos()
-            block_beneath = mc.getBlock(lastPlayerPos.x, lastPlayerPos.y-1, lastPlayerPos.z)  # block ID
+            #print("player x=%d y=%d, z=%d" % (currentPlayerPos.x, currentPlayerPos.y, currentPlayerPos.z))
+            Block_beneath = mc.getBlock(lastPlayerPos.x, lastPlayerPos.y-1, lastPlayerPos.z)  # block ID
+            if Block_beneath == block.WATER_FLOWING or Block_beneath == block.WATER_STATIONARY:
+              Block_beneath = block.WATER
+              print("water")
 
             # has the player moved in either X or Z (are they WALKING?)
             if lastPlayerPos.x != currentPlayerPos.x or lastPlayerPos.z != currentPlayerPos.z:
                 # if player is FALLING they cant be WALKING
                 
                 if playersState != FALLING:
-                    if block_beneath == block.AIR:
+                    if Block_beneath == block.AIR and lastBlock_beneath == block.AIR and playerJumped == False:
                       playersState = FLYING
-                    elif block_beneath == block.WATER_FLOWING or block_beneath == block.WATER_STATIONARY:                      
+                      print("flying")
+                    elif Block_beneath == block.WATER:
                       playersState = SWIMING
+                      print("swiming")
                     else:
                       playersState = WALKING
+                      print("walking")
+                else:
+                      print("not falling status %d" % playersState)
+
 
             # has the player moved in positive Y (have they jumped?)
             if int(lastPlayerPos.y) < int(currentPlayerPos.y):
@@ -85,6 +95,7 @@ if __name__ == "__main__":
 
             # has the player moved in negative Y (are they FALLING?)
             if int(lastPlayerPos.y) > int(currentPlayerPos.y):
+                print("falling state")
                 playersState = FALLING
 
             # is the player still falling?
@@ -92,14 +103,17 @@ if __name__ == "__main__":
                 # increase the distance they have fallen
                 playerFallDistance = playerFallDistance + (lastPlayerPos.y - currentPlayerPos.y)
 
+            # has the player STOPPED
+            if playersState == WALKING and lastPlayerPos.x == currentPlayerPos.x and lastPlayerPos.z == currentPlayerPos.z:
+                print("state stopped x,z")
+                playersState = STOPPED
+
             # if the player is FALLING but has stopped moving down
             # (have they STOPPED FALLING?)
             if playersState == FALLING and int(lastPlayerPos.y) == int(currentPlayerPos.y):
+                print("state stopped y")
                 playersState = STOPPED
-
-            # has the player STOPPED
-            if lastPlayerPos.x == currentPlayerPos.x and lastPlayerPos.z == currentPlayerPos.z:
-                playersState = STOPPED
+ 
 
             # if last players state != walking and players state = walking
             # player has started WALKING
@@ -131,26 +145,38 @@ if __name__ == "__main__":
             # if the players state = falling and the distance they have fell is greater than 3
             # player has started FALLING
             if playersState == FALLING and playerFallDistance > 3:
+                print("falling")
                 if playerFalling == False:
                     soundFalling.play()
                     playerFalling = True
+                else:
+                  if lastBlock_beneath != block.WATER and Block_beneath == block.WATER:
+                    print("hit water")
+                    soundSplash.play()     
 
             # if last players state = falling and the players state != falling
             # player has stopped falling
             if lastPlayersState == FALLING and playersState != FALLING and playerFalling == True:
+                print("falling stopped, hit ground")
                 soundFalling.stop()
-                print("landing")
                 soundLanding.play()
                 playerFallDistance = 0
                 playerFalling = False
             
             # if player has jumped and the jump sound is not playing
-            if playerJumped == True:
-                soundJump.play()
+            if playerJumped == True and playersState == WALKING:
+                elapsed = time.time()-playerLastJumpTime
+                if elapsed>0.5:
+                  print("jump %f %d" % (elapsed, playersState))
+                  soundJump.play()
+                else:
+                  print("double jump")
+                playerLastJumpTime = time.time()
                 playerJumped = False
 
             lastPlayerPos = currentPlayerPos
             lastPlayersState = playersState
+            lastBlock_beneath = Block_beneath
 
             #Get the block hit events
             blockHits = mc.events.pollBlockHits()
