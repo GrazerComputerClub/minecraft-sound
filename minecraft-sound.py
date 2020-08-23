@@ -1,12 +1,13 @@
-#www.stuffaboutcode.com & GC2.at
-#Raspberry Pi, Minecraft Sound - Add some sound effects to minecraft
+# www.stuffaboutcode.com & GC2.at
+# Raspberry Pi, Minecraft Sound - Add some sound effects and features to minecraft
 # unchanged music by http://www.nosoapradio.us/, see LICENCE https://gamesounds.xyz/No%20soap%20radio/LICENSE
+# Version 0.2 Beta
 
 from time import time
 from mcpi import minecraft
 from mcpi import block
 import time
-#import pygame to use the mixer to play wav file
+#import pygame to play sound files
 import pygame
 
 # constants
@@ -44,7 +45,6 @@ if __name__ == "__main__":
     soundSwiming = pygame.mixer.Sound("sounds/swiming.wav") #http://soundbible.com/2032-Water.html - public domai
     soundSplash = pygame.mixer.Sound("sounds/splash.wav")   #http://soundbible.com/2100-Splash-Rock-In-Lake.html
 
-    
     mc.postToChat("sound sfx by http://soundbible.com/ (public domain)")
 
     # setup variables
