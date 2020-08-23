@@ -58,13 +58,13 @@ if __name__ == "__main__":
 
     #get players position
     lastPlayerPos = mc.player.getPos()
-
     # loop until CTRL+C
     try:
         while(True):
 
             # get players position
             currentPlayerPos = mc.player.getPos()
+
             #print("player x=%d y=%d, z=%d" % (currentPlayerPos.x, currentPlayerPos.y, currentPlayerPos.z))
             Block_beneath = mc.getBlock(lastPlayerPos.x, lastPlayerPos.y-1, lastPlayerPos.z)  # block ID
             if Block_beneath == block.WATER_FLOWING or Block_beneath == block.WATER_STATIONARY:
@@ -181,10 +181,18 @@ if __name__ == "__main__":
             #Get the block hit events
             blockHits = mc.events.pollBlockHits()
             # block has been hit by right-mouse click
-            #if blockHits:
             for hit in blockHits:
-                print("Hits: " , blockHits)
-                soundSword.play()
+              print("Hits: " , blockHits)
+              soundSword.play()
+              Block_Hit = mc.getBlockWithData(hit.pos.x, hit.pos.y, hit.pos.z)
+              # turn inactive TNT into explosive TNT
+              if Block_Hit.id == block.TNT.id:
+                if Block_Hit.data == 0:
+                  print("set TNT explosive %d" % (block.TNT.id))
+                  mc.setBlock(hit.pos.x, hit.pos.y, hit.pos.z, block.TNT.id, 1)
+                  mc.postToChat("turned into explosive TNT- hit for detonation")
+                if Block_Hit.data == 1:
+                  mc.postToChat("hit TNT for detonation")
             
             # sleep to meet 20 Hz update
             time.sleep(0.05) 
