@@ -4,10 +4,12 @@
 
 ### Version history  
   0.2 - GC2 version 
-   * Replaced Sound with Public Domain sounds
-   * New sounds (splash, flying)
-   * Background Music
-   * Optimizations (double jump for flying)  
+   - Port to Python 3
+   - Replaced Sound with Public Domain sounds
+   - New sounds (splash, flying)
+   - Background music
+   - Optimizations (double jump for flying)
+   - Activation of explosive TNT block (by simply hit it with sword)
    
   0.1 - first beta release by Martin O'Hanlon (martin@ohanlonweb.com) - http://www.stuffaboutcode.com
 
