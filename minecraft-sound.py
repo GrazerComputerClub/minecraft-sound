@@ -1,7 +1,7 @@
 # www.stuffaboutcode.com & GC2.at
-# Raspberry Pi, Minecraft Sound - Add some sound effects and features to minecraft
+# Raspberry Pi, GC2's Minecraft Pi Music, Sound and TNT- Add some sound effects and features to Minecraft Pi
 # unchanged music by http://www.nosoapradio.us/, see LICENCE https://gamesounds.xyz/No%20soap%20radio/LICENSE
-# Version 0.2 Beta
+# Version 0.3 Beta
 
 from time import time
 from mcpi import minecraft
@@ -17,34 +17,16 @@ FALLING = 3
 FLYING  = 4
 SWIMING = 5
 
+
 def run():
     try:
         #Connect to minecraft by creating the minecraft object
         # - minecraft needs to be running and in a game
         mc = minecraft.Minecraft.create()
-        mc.postToChat("Minecraft Sound Effects ")
-        mc.postToChat(" by www.stuffaboutcode.com and gc2.at")
-
-        #Initialise pygame and the mixer
-        pygame.init()
-        pygame.mixer.init()
-    
-        #MP3 background music from  http://www.nosoapradio.us/
-        pygame.mixer.music.load("music/DST-BattleLands.mp3")
-        pygame.mixer.music.play(-1)
-    
+        mc.postToChat("GC2's Minecraft Pi Music, Sound and TNT")
+        mc.postToChat(" based upon project from Martin O'Hanlon")
         mc.postToChat("music by http://www.nosoapradio.us/")
-
-        #load WAVS files
-        soundWalking = pygame.mixer.Sound("sounds/walking.wav") #http://soundbible.com/2057-Footsteps-On-Cement.html
-        soundJump = pygame.mixer.Sound("sounds/jump.wav") #http://soundbible.com/1953-Neck-Snap.html
-        soundFalling = pygame.mixer.Sound("sounds/falling.wav") #http://soundbible.com/1247-Wind.html
-        soundLanding = pygame.mixer.Sound("sounds/landing.wav") #http://soundbible.com/1952-Punch-Or-Whack.html
-        soundSword = pygame.mixer.Sound("sounds/sword.wav") #http://soundbible.com/1898-Spin-Jump.html - public domain 
-        soundFlying = pygame.mixer.Sound("sounds/flying.wav") #http://soundbible.com/1036-Propeller.html - public domain 
-        soundSwiming = pygame.mixer.Sound("sounds/swiming.wav") #http://soundbible.com/2032-Water.html - public domai
-        soundSplash = pygame.mixer.Sound("sounds/splash.wav")   #http://soundbible.com/2100-Splash-Rock-In-Lake.html
-
+        pygame.mixer.music.play(-1)
         mc.postToChat("sound sfx by http://soundbible.com/ (public domain)")
 
         # setup variables
@@ -192,20 +174,50 @@ def run():
                       mc.setBlock(hit.pos.x, hit.pos.y, hit.pos.z, block.TNT.id, 1)
                       mc.postToChat("turned into explosive TNT- hit for detonation")
                     if Block_Hit.data == 1:
-                      mc.postToChat("hit TNT for detonation")
+                      mc.postToChat("hit TNT for detonation (left mouse)")
             
                 # sleep to meet 20 Hz update
                 time.sleep(0.05) 
 
-    except KeyboardInterrupt:
-        print("stopped")
-        return 0
+        except KeyboardInterrupt:
+          print("stopped")
+          return 0
+
     except:
-        print("Unhandled - retry...")
+        print("No connetion to mcpi ...")
+        pygame.mixer.music.stop()
         return -1
 
 if __name__ == "__main__":
+    print("")
+    print("================================================") 
+    print("| GC2's Minecraft Pi Music, Sound and TNT      |") 
+    print("================================================")
+    print("                      | |                       ") 
+    print("                      | |                       ") 
+    print("")
+
+    #Initialise pygame and the mixer
+    print("Initialise music and sound") 
+    pygame.init()
+    pygame.mixer.init()
+
+    #MP3 background music from  http://www.nosoapradio.us/
+    print("music by http://www.nosoapradio.us/")
+    pygame.mixer.music.load("music/DST-BattleLands.mp3")
+
+    #load WAVS files
+    print("sound effects by http://soundbible.com/ (public domain)")
+    soundWalking = pygame.mixer.Sound("sounds/walking.wav") #http://soundbible.com/2057-Footsteps-On-Cement.html
+    soundJump = pygame.mixer.Sound("sounds/jump.wav") #http://soundbible.com/1953-Neck-Snap.html
+    soundFalling = pygame.mixer.Sound("sounds/falling.wav") #http://soundbible.com/1247-Wind.html
+    soundLanding = pygame.mixer.Sound("sounds/landing.wav") #http://soundbible.com/1952-Punch-Or-Whack.html
+    soundSword = pygame.mixer.Sound("sounds/sword.wav") #http://soundbible.com/1898-Spin-Jump.html
+    soundFlying = pygame.mixer.Sound("sounds/flying.wav") #http://soundbible.com/1036-Propeller.html
+    soundSwiming = pygame.mixer.Sound("sounds/swiming.wav") #http://soundbible.com/2032-Water.html
+    soundSplash = pygame.mixer.Sound("sounds/splash.wav")   #http://soundbible.com/2100-Splash-Rock-In-Lake.html
+
     while run() != 0:
-        time.sleep(60) # seconds before retry
+        time.sleep(10) # seconds before retry
     print("Exit")
 
