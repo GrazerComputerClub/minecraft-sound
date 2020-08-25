@@ -1,5 +1,34 @@
 ## GC2's Minecraft Pi Music, Sound and TNT
 
+
+### Installation
+
+   - Download latest release version and unzip to /home/pi/minecraft-sound
+   - edit '/usr/bin/minecraft-pi' and add sound process start and stop:
+   ```
+   cd /opt/minecraft-pi || exit
+   
+   cd /home/pi/minecraft-sound
+python3 minecraft-sound.py &
+PID=$!
+echo Minecraft Sound process PID is $PID
+
+cd /opt/minecraft-pi
+
+if grep -q okay /proc/device-tree/soc/v3d@7ec00000/status \
+        /proc/device-tree/soc/firmwarekms@7e600000/status 2> /dev/null; then
+        export LD_PRELOAD=libbcm_host.so.1.0
+        export LD_LIBRARY_PATH=lib/mesa
+else
+        export LD_LIBRARY_PATH=lib/brcm
+fi
+
+./minecraft-pi
+echo stopping Minecraft Sound process
+kill -KILL $PID
+   ```
+   
+
 ------------------------------------------------------------------------------
 
 ### Version history 
