@@ -1,8 +1,12 @@
-## Minecraft Pi - Sound Effects
+## GC2's Minecraft Pi Music, Sound and TNT
 
 ------------------------------------------------------------------------------
 
-### Version history  
+### Version history 
+  0.3 - GC2 version
+   - Program stays active after closing map or Minecraft Pi
+   - Automatic reconnect
+   
   0.2 - GC2 version 
    - Port to Python 3
    - Replaced Sound with Public Domain sounds
