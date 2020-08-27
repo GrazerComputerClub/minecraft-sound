@@ -168,6 +168,7 @@ def run():
                   soundSword.play()
                   Block_Hit = mc.getBlockWithData(hit.pos.x, hit.pos.y, hit.pos.z)
                   # turn inactive TNT into explosive TNT
+                  print("block = %d, data = %d" %  (Block_Hit.id,  Block_Hit.data))
                   if Block_Hit.id == block.TNT.id:
                     if Block_Hit.data == 0:
                       print("set TNT explosive %d" % (block.TNT.id))
@@ -175,6 +176,15 @@ def run():
                       mc.postToChat("turned into explosive TNT- hit for detonation")
                     if Block_Hit.data == 1:
                       mc.postToChat("hit TNT for detonation (left mouse)")
+                  if Block_Hit.id == 247: #block.NETHER_REACTOR_CORE.id
+                    if Block_Hit.data == 0 or Block_Hit.data == 2:
+                      mc.setBlock(hit.pos.x, hit.pos.y, hit.pos.z, 247, 1)
+                      mc.postToChat("reactor activated")
+                      print("reactor activated")
+                    if Block_Hit.data == 1:
+                      mc.setBlock(hit.pos.x, hit.pos.y, hit.pos.z, 247, 2)
+                      mc.postToChat("reactor stopped")
+                      print("reactor stopped")
             
                 # sleep to meet 20 Hz update
                 time.sleep(0.05) 
