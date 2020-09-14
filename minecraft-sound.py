@@ -51,7 +51,7 @@ def run():
                 Block_beneath = mc.getBlock(lastPlayerPos.x, lastPlayerPos.y-1, lastPlayerPos.z)  # block ID
                 if Block_beneath == block.WATER_FLOWING or Block_beneath == block.WATER_STATIONARY:
                   Block_beneath = block.WATER
-                  print("water")
+                  print("beneath is water")
 
                 # has the player moved in either X or Z (are they WALKING?)
                 if lastPlayerPos.x != currentPlayerPos.x or lastPlayerPos.z != currentPlayerPos.z:
@@ -67,8 +67,8 @@ def run():
                         else:
                           playersState = WALKING
                           print("walking")
-                    else:
-                          print("not falling status %d" % playersState)
+                    #else:
+                    #      print("not falling status %d" % playersState)
 
 
                 # has the player moved in positive Y (have they jumped?)
@@ -100,27 +100,33 @@ def run():
                 # if last players state != walking and players state = walking
                 # player has started WALKING
                 if lastPlayersState != WALKING and playersState == WALKING:
+                    print("walking sound play")
                     soundWalking.play(-1)
 
                 # if last players state = walking and players state != walking
                 # player has stopped WALKING
                 if lastPlayersState == WALKING and playersState != WALKING:
+                    print("walking sound stop")
                     soundWalking.stop()
                 
                  # player has started FLYING
                 if lastPlayersState != FLYING and playersState == FLYING:
+                    print("flying sound play")
                     soundFlying.play(-1)      
                 
                 # player has stopped FLYING
                 if lastPlayersState == FLYING and playersState != FLYING:
+                    print("flying sound stop")
                     soundFlying.stop()                              
 
                  # player has started SWIMING
                 if lastPlayersState != SWIMING and playersState == SWIMING:
+                    print("swiming sound play")
                     soundSwiming.play(-1)      
                 
                 # player has stopped SWIMING
                 if lastPlayersState == SWIMING and playersState != SWIMING:
+                    print("swiming sound stop")
                     soundSwiming.stop()                              
 
 
@@ -129,17 +135,18 @@ def run():
                 if playersState == FALLING and playerFallDistance > 3:
                     print("falling")
                     if playerFalling == False:
+                        print("falling sound play")
                         soundFalling.play()
                         playerFalling = True
                     else:
                       if lastBlock_beneath != block.WATER and Block_beneath == block.WATER:
-                        print("hit water")
+                        print("hit water sound play")
                         soundSplash.play()     
 
                 # if last players state = falling and the players state != falling
                 # player has stopped falling
                 if lastPlayersState == FALLING and playersState != FALLING and playerFalling == True:
-                    print("falling stopped, hit ground")
+                    print("falling stopped, hit ground sound play")
                     soundFalling.stop()
                     soundLanding.play()
                     playerFallDistance = 0
@@ -149,7 +156,7 @@ def run():
                 if playerJumped == True and playersState == WALKING:
                     elapsed = time.time()-playerLastJumpTime
                     if elapsed>0.5:
-                      print("jump %f %d" % (elapsed, playersState))
+                      print("jump %f %d sound play" % (elapsed, playersState))
                       soundJump.play()
                     else:
                       print("double jump")
@@ -164,7 +171,7 @@ def run():
                 blockHits = mc.events.pollBlockHits()
                 # block has been hit by right-mouse click
                 for hit in blockHits:
-                  print("Hits: " , blockHits)
+                  print("Hit sound play")
                   soundSword.play()
                   Block_Hit = mc.getBlockWithData(hit.pos.x, hit.pos.y, hit.pos.z)
                   # turn inactive TNT into explosive TNT
@@ -223,7 +230,7 @@ if __name__ == "__main__":
     soundFalling = pygame.mixer.Sound("sounds/falling.wav") #http://soundbible.com/1247-Wind.html
     soundLanding = pygame.mixer.Sound("sounds/landing.wav") #http://soundbible.com/1952-Punch-Or-Whack.html
     soundSword = pygame.mixer.Sound("sounds/sword.wav") #http://soundbible.com/1898-Spin-Jump.html
-    soundFlying = pygame.mixer.Sound("sounds/flying.wav") #http://soundbible.com/1036-Propeller.html
+    soundFlying = pygame.mixer.Sound("sounds/flying.wav") #http://soundbible.com/1247-Wind.html
     soundSwiming = pygame.mixer.Sound("sounds/swiming.wav") #http://soundbible.com/2032-Water.html
     soundSplash = pygame.mixer.Sound("sounds/splash.wav")   #http://soundbible.com/2100-Splash-Rock-In-Lake.html
 
